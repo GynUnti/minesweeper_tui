@@ -1,5 +1,8 @@
 # Components:
 
+## Language
+- C
+
 ## Logic
 - Generate a custom size board/2D matrix (let's make it static at first - 30x30)
 - Let user click on a square
