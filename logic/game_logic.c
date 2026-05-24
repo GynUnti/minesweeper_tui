@@ -7,8 +7,13 @@ int main(void) {
   int n, m;
   n = 30;
   m = 30;
-  char** matrix = calloc(30*30, sizeof(char));
-  printMatrix(matrix);
+  char matrix[n][m]; 
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      matrix[i][j] = 0;
+    }
+  }
+  printMatrix(&matrix);
   return 0;
 }
 
@@ -23,3 +28,4 @@ int printMatrix(char** matrix) {
   }
   return 0;
 }
+
