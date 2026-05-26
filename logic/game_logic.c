@@ -20,9 +20,9 @@ int main(void) {
     }
   }
   // Generate bombs position array. Based on the number of bombs user choose, we only choose the first n position to put the bomb in matrix 
-  int bombs[n*m];
-  for (int i = 1; i <= n*m; i++) {
-    bombs[i] = i;
+  int* bombs = malloc(n*m * sizeof(int));
+  for (int i = 0; i < n*m; i++) {
+    bombs[i] = i+1;
   }
   shuffle(bombs, n*m); // Shuffle bomb positions
   printf("\nPlease enter number of bombs (<%d): ", n*m);
@@ -35,7 +35,7 @@ int main(void) {
   
   // Place the bombs in the matrix
   int count = 0;
-  for (int i = 1; count <= bombNum; i++) {
+  for (int i = 0; count < bombNum; i++) {
     // bombs[i] = m*x + y
     int yTemp = bombs[i] % m;
     int xTemp = (bombs[i] / m) + 1;
