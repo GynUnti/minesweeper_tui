@@ -5,6 +5,7 @@
 int printMatrix(int n, int m, char matrix[n][m]);
 void shuffle(int array[], int arrayLength);
 
+// MAIN FUNCTION
 int main(void) {
   int n, m;
   int bombNum;
@@ -48,6 +49,7 @@ int main(void) {
       count++;
     }
   }
+  free(bombs); // free memory, no longer use bombs[]
 
   // Insert the number of bombs around a square (not at the edges, because we only count the inner n x m matrix)
   for (int i = 1; i <= n; i++) {
@@ -72,6 +74,7 @@ int main(void) {
   return 0;
 }
 
+// PRINT MATRIX FUNCTION
 int printMatrix(int n, int m, char matrix[n+2][m+2]) {
   printf("|%2c", ' ');
   for (int j = 1; j <= m; j++) {
@@ -88,6 +91,7 @@ int printMatrix(int n, int m, char matrix[n+2][m+2]) {
   return 0;
 }
 
+// SHUFFLE FUNCTION
 void shuffle(int array[], int arrayLength) {
   srand( time(NULL) );
   for (int i = 0; i < arrayLength; i++) {
