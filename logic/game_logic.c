@@ -151,6 +151,6 @@ void expand(int x, int y, int n, int m, char matrix[n+2][m+2], char visibleMatri
   expand(x+1,y,n,m,matrix,visibleMatrix);
   expand(x-1,y+1,n,m,matrix,visibleMatrix);
   expand(x,y+1,n,m,matrix,visibleMatrix);
-  expand(x-1,y+1,n,m,matrix,visibleMatrix);
+  expand(x+1,y+1,n,m,matrix,visibleMatrix);
   return;
 }
