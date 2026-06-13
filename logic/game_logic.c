@@ -106,15 +106,18 @@ int main(void) {
   do {
     // bool flag = false;
     // printf("\x1b[2J");
-    printf("Choose your next coordination (x y): ");
+    printf("Choose your next coordination (x y) or flag (f x y): ");
+    char f = getchar();
     scanf("%d%d", &x, &y);
-    if (matrix[x][y] == 'x') {
-      printMatrix(n, m, matrix);
-      printf("You Lose!");
+    if (f == 'f') visibleMatrix[x][y] = 'f';
+    else {
+      if (matrix[x][y] == 'x') {
+        printMatrix(n, m, matrix);
+        printf("You Lose!");
+       }
+      expand(x,y,n,m,freeNumPt,matrix,visibleMatrix);
     }
-    expand(x,y,n,m,freeNumPt,matrix,visibleMatrix);
     printMatrix(n,m,visibleMatrix);
-    // if (flag) matrix[x][y] = 'f';
   } while (freeNum > 0);
 
   if (freeNum == 0) {
@@ -156,18 +159,20 @@ void shuffle(int array[], int arrayLength) {
 // EXPAND VISIBLE SQUARES FUNCTION
 void expand(int x, int y, int n, int m, int* freeNumPt, char matrix[n+2][m+2], char visibleMatrix[n+2][m+2]) {
   if (visibleMatrix[x][y] == matrix[x][y]) return; 
+  if (matrix[x][y] == 'x') return;
   visibleMatrix[x][y] = matrix[x][y];
   (*freeNumPt)--;
-  if (matrix[x][y] != ' ') { 
-    return;
+  if (matrix[x][y] == ' ') { 
+    expand(x,y-1,n,m,freeNumPt,matrix,visibleMatrix);
+    expand(x-1,y,n,m,freeNumPt,matrix,visibleMatrix);
+    expand(x+1,y,n,m,freeNumPt,matrix,visibleMatrix);
+    expand(x,y+1,n,m,freeNumPt,matrix,visibleMatrix);
   }
-  expand(x-1,y-1,n,m,freeNumPt,matrix,visibleMatrix);
-  expand(x,y-1,n,m,freeNumPt,matrix,visibleMatrix);
-  expand(x+1,y-1,n,m,freeNumPt,matrix,visibleMatrix);
-  expand(x-1,y,n,m,freeNumPt,matrix,visibleMatrix);
-  expand(x+1,y,n,m,freeNumPt,matrix,visibleMatrix);
-  expand(x-1,y+1,n,m,freeNumPt,matrix,visibleMatrix);
-  expand(x,y+1,n,m,freeNumPt,matrix,visibleMatrix);
-  expand(x+1,y+1,n,m,freeNumPt,matrix,visibleMatrix);
+  else if (matrix[x][y] != 'x') {
+    if (matrix[x][y-1] == ' ') expand(x,y-1,n,m,freeNumPt,matrix,visibleMatrix);
+    if (matrix[x-1][y] == ' ') expand(x-1,y,n,m,freeNumPt,matrix,visibleMatrix);
+    if (matrix[x][y+1] == ' ') expand(x,y+1,n,m,freeNumPt,matrix,visibleMatrix);
+    if (matrix[x+1][y] == ' ') expand(x+1,y,n,m,freeNumPt,matrix,visibleMatrix);
+  }
   return;
 }
