@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
-int printMatrix(int n, int m, char matrix[n][m]);
-void shuffle(int array[], int arrayLength);
-void expand(int x, int y, int n, int m, int* freeNumPt, char matrix[n+3][m+2], char visibleMatrix[n+2][m+2]);
+#include "headers.h"
 
 // MAIN FUNCTION
 int main(void) {
