@@ -1,22 +1,13 @@
 #include "headers.h"
 
-typedef struct {
-  int rows, cols, bombs;
-  char board[MAX_ROWS][MAX_COLS]; /* true board "hidden" */
-  char visible[MAX_ROWS][MAX_COLS]; /* visible board for user */
-  int firstRow, firstCol; /* first coordination, avoid place bomb */
-  int freeCellsLeft; /* free non-bomb cells left, 0 left means user won */
-  int state; /* STATE_ONGOING, STATE_WON, STATE_LOST */
-} Game;
-
 void initSize(Game *g) {
   printf("\nPlease enter number of rows and columns.");
   printf("\nRows (1-100): ");
-  scanf("%d", g->&rows);
+  scanf("%d", &(g->rows));
   printf("\nColumns (1-100): ");
-  scanf("%d", g->&cols);
+  scanf("%d", &(g->cols));
   printf("\nPlease enter number of bombs (1-%d): ", g->rows * g->cols - 1);
-  scanf("%d", g->&bombs);
+  scanf("%d", &(g->bombs));
   g->freeCellsLeft = g->rows * g->cols - g-> bombs;
   g->state = STATE_ONGOING; /* Start the game */
 }
@@ -29,14 +20,10 @@ void initBoard(Game *g) {
       g->visible[r][c] = '#';
     }
   }
+  g->firstMove = true;
 }
 
-void firstCell(Game *g) {
-  printf("\nChoose your first cell (x y): ");
-  scanf("%d%d", g->&firstRow, g->&firstCol);
-}
-
-void placeBomb(Game *g) {
+void placeBomb(Game *g, int firstRow, int firstCol) {
   int rows = g->rows;
   int cols = g->cols;
   int bombs = g->bombs;
@@ -52,7 +39,7 @@ void placeBomb(Game *g) {
    int random = rand() % i;
    int temp = bombPlace[i];
    bombPlace[i] = bombPlace[random];
-   bombPlace[Random] = temp;
+   bombPlace[random] = temp;
   }
   for (int i = 0, j = 0; i < bombs; i++, j++) {
     int r = bombPlace[j] / cols;
@@ -61,7 +48,7 @@ void placeBomb(Game *g) {
       i--;
       continue;
     }
-    board[r][c] = 'x'; /* Place bomb */
+    g->board[r][c] = 'x'; /* Place bomb */
     free(bombPlace); /* Free bomb placements array */
   }
 }
@@ -72,16 +59,16 @@ void numGen(Game *g) {
   for (int r = 0; r < rows; r++) {
     for (int c = 0; c < cols; c++) {
       int n = 0;
-      if (board[r][c] == 'x') continue;
+      if (g->board[r][c] == 'x') continue;
       for (int i = -1; i <=1; i++) {
         for (int j = -1; j <= 1; j++) {
           if (i==0 && j==0) continue;
           if (r+i < 0 || r+i >= rows || c+j <0 || c+j >= cols) continue;
-          if (board[r+i][c+j] = 'x') n++;
+          if (g->board[r+i][c+j] = 'x') n++;
         }
       }
-      if (n == 0) board[r][c] = ' ';
-      else board[r][c] = n + '0';
+      if (n == 0) g->board[r][c] = ' ';
+      else g->board[r][c] = n + '0';
     }
   }
 }
@@ -94,7 +81,7 @@ void domainExpansion(Game *g, int r, int c) {
   if (cell == 'x') return;
   if (g->visible[r][c] != '#') return;
   g->visible[r][c] = cell;
-  g->free--;
+  g->freeCellsLeft--;
   
   /* Expand recursively if the cell have no bomb near it */
   if (cell == ' ') {
