@@ -32,25 +32,28 @@ void placeBomb(Game *g, int firstRow, int firstCol) {
    * Create an array of bomb placements for all position, shuffle it, and pick 
    * the first *bombs* number of bomb placements (exclude the first cell) to place the bombs
    */
-  int* bombPlace = (int*)malloc((unsigned)total * sizeof(int));
+  int* bombPlace = (int*)malloc(total * sizeof(int));
   srand(time(NULL));
   for (int i = 0; i < total; i++) bombPlace[i] = i;
-  for (int i = total-1; i >= 0; i--) {
+
+  /* scramble the bomb placements */
+  /* i = 0 will cause division by 0 */
+  for (int i = total-1; i > 0; i--) {
    int random = rand() % i;
    int temp = bombPlace[i];
    bombPlace[i] = bombPlace[random];
    bombPlace[random] = temp;
   }
-  for (int i = 0, j = 0; i < bombs; i++, j++) {
+
+  /* Place bombs, avoiding the initial cell */
+  for (int placed = 0, j = 0; placed < bombs; j++) {
     int r = bombPlace[j] / cols;
     int c = bombPlace[j] % cols;
-    if (r == firstRow && c == firstCol) {
-      i--;
-      continue;
-    }
+    if (r == firstRow && c == firstCol) continue;
     g->board[r][c] = 'x'; /* Place bomb */
-    free(bombPlace); /* Free bomb placements array */
+    placed++;
   }
+  free(bombPlace); /* Free bomb placements array */
 }
 
 void numGen(Game *g) {
@@ -64,7 +67,7 @@ void numGen(Game *g) {
         for (int j = -1; j <= 1; j++) {
           if (i==0 && j==0) continue;
           if (r+i < 0 || r+i >= rows || c+j <0 || c+j >= cols) continue;
-          if (g->board[r+i][c+j] = 'x') n++;
+          if (g->board[r+i][c+j] == 'x') n++;
         }
       }
       if (n == 0) g->board[r][c] = ' ';

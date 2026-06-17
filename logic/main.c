@@ -8,8 +8,8 @@ int main(void) {
   initSize(&g);
   initBoard(&g);
   while (g.state == STATE_ONGOING) {
-    printBoard(&g);
     int r, c;
+    printBoard(&g);
     printf("Pick your cell (r, c): ");
     scanf("%d%d", &r, &c);
     if (g.firstMove) {
