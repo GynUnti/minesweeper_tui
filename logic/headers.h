@@ -23,4 +23,4 @@ void initBoard(Game *g);
 void placeBomb(Game *g, int firstRow, int FirstCol);
 void numGen(Game *g);
 void domainExpansion(Game *g, int r, int c);
-
+void flagToggle(Game *g, int r, int c);

@@ -76,13 +76,14 @@ void numGen(Game *g) {
   }
 }
 
+/* Expand visible board once user choose a cell */
 void domainExpansion(Game *g, int r, int c) {
   int rows = g->rows;
   int cols = g->cols;
   if (r < 0 || r >= rows || c < 0 || c >= cols) return;
   char cell = g->board[r][c];
   if (cell == 'x') return;
-  if (g->visible[r][c] != '#') return;
+  if (g->visible[r][c] != '#' && g->visible[r][c] != 'f') return;
   g->visible[r][c] = cell;
   g->freeCellsLeft--;
   
@@ -97,4 +98,18 @@ void domainExpansion(Game *g, int r, int c) {
   }
 }
 
-
+/* Flag Toggle function */
+void flagToggle(Game *g, int r, int c) {
+  int rows = g->rows;
+  int cols = g->cols; 
+  if (r >= rows || c >= cols) {
+    printf("cell out of range\n");
+    return;
+  }
+  if (g->visible[r][c] == '#') {
+    g->visible[r][c] = 'f';
+  }
+  else if (g->visible[r][c] == 'f') {
+    g->visible[r][c] = '#';
+  }
+}
