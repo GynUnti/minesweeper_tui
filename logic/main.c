@@ -3,15 +3,14 @@
 // MAIN FUNCTION
 int main(void) {
   Game g;
-  initSize(&g);
+  tuiInit();
+  gameSetup(&g);
   initBoard(&g);
-  initscr();
-  clear();
   while (g.state == STATE_ONGOING) {
     int r, c;
     char flag;
     printBoard(&g);
-    printw("Pick your cell (r, c) (add f for flag): ");
+    printw("Pick your cell (r, c) (press f after Enter for flag): ");
     scanw("%d%d", &r, &c);
     while ((flag = getch()) != '\n') {
       refresh();
@@ -29,22 +28,13 @@ int main(void) {
       g.firstMove = false;
     }
     domainExpansion(&g, r, c);
-    if (g.board[r][c] == 'x') {
-      printAll(&g);
-      printw("\nYou Lose!");
-      printw("\n\nPress any key to exit.");
-      noecho();
-      getch();
-      return 0;
-    }
-    if (g.freeCellsLeft == 0) {
-      printAll(&g);
-      printw("\nYou Won!");
-      printw("\n\nPress any key to exit.");
-      noecho();
-      getch();
-      return 0;
-    }
+    winCheck(&g, r, c);
   }
+  printAll(&g);
+  if (g.state == STATE_WON) printw("YOU WON!\nPress any key to exit.");
+  else printw("YOU LOST!\nPress any key to exit.");
+  refresh();
+  getch();
+  endwin();
   return 0;
 }

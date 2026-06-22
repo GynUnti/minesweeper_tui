@@ -1,16 +1,5 @@
 #include "headers.h"
 
-void initSize(Game *g) {
-  printf("\nPlease enter number of rows and columns.");
-  printf("\nRows (1-100): ");
-  scanf("%d", &(g->rows));
-  printf("\nColumns (1-100): ");
-  scanf("%d", &(g->cols));
-  printf("\nPlease enter number of bombs (1-%d): ", g->rows * g->cols - 1);
-  scanf("%d", &(g->bombs));
-  g->freeCellsLeft = g->rows * g->cols - g-> bombs;
-  g->state = STATE_ONGOING; /* Start the game */
-}
 
 void initBoard(Game *g) {
   int rows = g->rows;
@@ -113,3 +102,9 @@ void flagToggle(Game *g, int r, int c) {
     g->visible[r][c] = '#';
   }
 }
+
+void winCheck(Game* g, int r, int c) {
+  if (g->freeCellsLeft == 0) g->state = STATE_WON;
+  else if (g->board[r][c] == 'x') g->state = STATE_LOST;
+}
+

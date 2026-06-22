@@ -21,15 +21,17 @@ typedef struct {
 /*
  * logic functions
  */
-void initSize(Game *g);
 void initBoard(Game *g);
 void placeBomb(Game *g, int firstRow, int FirstCol);
 void numGen(Game *g);
 void domainExpansion(Game *g, int r, int c);
 void flagToggle(Game *g, int r, int c);
+void winCheck(Game* g, int r, int c);
 
 /*
  * ui functions
  */
+void tuiInit(void);
+void gameSetup(Game* g);
 void printBoard(Game* g);
 void printAll(Game* g);
