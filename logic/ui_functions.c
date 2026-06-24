@@ -55,7 +55,8 @@ void gameSetup(Game* g) {
 }
 
 void initColors(void) {
-  start_color();
+  if (has_colors()) start_color();
+  else printf("Color Not Available");
   use_default_colors();
 
   init_pair(CP_HIDDEN, COLOR_WHITE, COLOR_BLUE);
