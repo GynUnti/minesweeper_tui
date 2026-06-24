@@ -9,6 +9,21 @@
 #define STATE_WON 1
 #define STATE_LOST 2
 
+/* define color pair naming convention */
+#define CP_HIDDEN 0
+#define CP_EMPTY 1
+#define CP_BOMB 2
+#define CP_FLAG 3
+#define CP_N1 4
+#define CP_N2 5
+#define CP_N3 6
+#define CP_N4 7
+#define CP_N5 8
+#define CP_N6 9
+#define CP_N7 10
+#define CP_N8 11
+
+
 typedef struct {
   int rows, cols, bombs;
   char board[MAX_ROW][MAX_COL]; /* true board "hidden" */
@@ -32,6 +47,8 @@ void winCheck(Game* g, int r, int c);
  * ui functions
  */
 void tuiInit(void);
+void initColors(void);
+int colorAttrAssign(char c);
 void gameSetup(Game* g);
 void printBoard(Game* g);
 void printAll(Game* g);

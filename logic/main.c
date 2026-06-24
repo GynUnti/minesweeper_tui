@@ -6,6 +6,7 @@ int main(void) {
   tuiInit();
   gameSetup(&g);
   initBoard(&g);
+  initColors();
   while (g.state == STATE_ONGOING) {
     int r, c;
     char flag;
