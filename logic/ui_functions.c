@@ -91,25 +91,29 @@ int colorAttrAssign(char c) {
   }
 }
 
-void printBoard(Game* g) {
+WINDOW* createBoard(Game* g) {
   clear();
   int rows = g->rows;
   int cols = g->cols;
   WINDOW* visibleBoard = newwin(rows, cols*3, 1, 3);
+  keypad(visibleBoard, true);
   for (int c = 0; c < cols; c++) {
     mvprintw(0, (c+1)*3, "%2d", c);
   }
   for (int r = 0; r < rows; r++) {
-    mvprintw(r+1, 0, " %2d", r);
+    mvprintw(r+1, 0, "%2d", r);
     for (int c = 0; c < cols; c++) {
-      char val = g->visible[r][c];
-      wattron(visibleBoard, COLOR_PAIR(colorAttrAssign(val)));
-      mvwprintw(visibleBoard, r, c*3,"|%c|", val);
-      wattroff(visibleBoard, COLOR_PAIR(colorAttrAssign(val)));
+      printCell(g, visibleBoard, r, c);
     }
   }
   printw("\n\n");
   refresh();
+  wrefresh(visibleBoard);
+  return visibleBoard;
+}
+
+void updateBoard(Game *g, WINDOW* visibleBoard, int r, int c) {
+  domainExpansion(g, visibleBoard, r, c);
   wrefresh(visibleBoard);
 }
 
@@ -124,10 +128,10 @@ void printAll(Game* g) {
   for (int r = 0; r < rows; r++) {
     mvprintw(r+1, 0, " %2d", r);
     for (int c = 0; c < cols; c++) {
-      char val = g->board[r][c];
-      wattron(board, COLOR_PAIR(colorAttrAssign(val)));
-      mvwprintw(board, r, c*3,"|%c|", val);
-      wattroff(board, COLOR_PAIR(colorAttrAssign(val)));
+      char cell = g->board[r][c];
+      wattron(board, COLOR_PAIR(colorAttrAssign(cell)));
+      mvwprintw(board, r, c*3,"|%c|", cell);
+      wattroff(board, COLOR_PAIR(colorAttrAssign(cell)));
     }
   }
   printw("\n\n");
@@ -135,4 +139,75 @@ void printAll(Game* g) {
   wrefresh(board);
 }
 
+int navigation(Game* g, WINDOW* visibleBoard) {
+  noecho();
+  curs_set(0);
+  static int r = 0;
+  static int c = 0;
+  int rows = g->rows;
+  int cols = g->cols;
+  while(true) {
+    wattron(visibleBoard, A_REVERSE);
+    printCell(g, visibleBoard, r, c);
+    wattroff(visibleBoard, A_REVERSE);
+    wrefresh(visibleBoard);
+    int move = wgetch(visibleBoard);
 
+    switch(move) {
+      case KEY_UP: 
+        printCell(g, visibleBoard, r, c);
+        r = (rows+r-1) % rows;
+        break;
+      case KEY_DOWN: 
+        printCell(g, visibleBoard, r, c);
+        r = (r+1) % rows;
+        break;
+      case KEY_LEFT:
+        printCell(g, visibleBoard, r, c);
+        c = (cols+c-1) % cols;
+        break;
+      case KEY_RIGHT:
+        printCell(g, visibleBoard, r, c);
+        c = (c+1) % cols;
+        break;
+      case 'k':
+        printCell(g, visibleBoard, r, c);
+        r = (rows+r-1) % rows;
+        break;
+      case 'j':
+        printCell(g, visibleBoard, r, c);
+        r = (r+1) % rows;
+        break;
+      case 'h':
+        printCell(g, visibleBoard, r, c);
+        c = (cols+c-1) % cols;
+        break;
+      case 'l':
+        printCell(g, visibleBoard, r, c);
+        c = (c+1) % cols;
+        break;
+      case 'f':
+        flagToggle(g, r, c);
+        break;
+      default: 
+        break;
+    }
+    if (move == 10) {
+      if (g->firstMove) {
+        placeBomb(g, r, c);
+        numGen(g);
+        g->firstMove = false;
+      }
+      updateBoard(g, visibleBoard, r, c);
+      break; // 10 is the wgetch() value for the Enter key. Some reason KEY_ENTER didn't work
+    }
+  }
+  winCheck(g, r, c);
+}
+
+void printCell(Game* g, WINDOW* visibleBoard, int r, int c) {
+  char cell = g->visible[r][c];
+  wattron(visibleBoard, COLOR_PAIR(colorAttrAssign(cell)));
+  mvwprintw(visibleBoard, r, c*3,"|%c|", cell);
+  wattroff(visibleBoard, COLOR_PAIR(colorAttrAssign(cell)));
+}

@@ -39,7 +39,7 @@ typedef struct {
 void initBoard(Game *g);
 void placeBomb(Game *g, int firstRow, int FirstCol);
 void numGen(Game *g);
-void domainExpansion(Game *g, int r, int c);
+void domainExpansion(Game *g, WINDOW* visibleBoard, int r, int c);
 void flagToggle(Game *g, int r, int c);
 void winCheck(Game* g, int r, int c);
 
@@ -47,8 +47,11 @@ void winCheck(Game* g, int r, int c);
  * ui functions
  */
 void tuiInit(void);
+void gameSetup(Game* g);
 void initColors(void);
 int colorAttrAssign(char c);
-void gameSetup(Game* g);
-void printBoard(Game* g);
+WINDOW* createBoard(Game* g);
+void updateBoard(Game* g, WINDOW* visibleBoard, int r, int c);
 void printAll(Game* g);
+int navigation(Game* g, WINDOW* visibleBoard);
+void printCell(Game* g, WINDOW* board, int r, int c);

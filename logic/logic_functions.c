@@ -66,7 +66,7 @@ void numGen(Game *g) {
 }
 
 /* Expand visible board once user choose a cell */
-void domainExpansion(Game *g, int r, int c) {
+void domainExpansion(Game *g, WINDOW* visibleBoard, int r, int c) {
   int rows = g->rows;
   int cols = g->cols;
   if (r < 0 || r >= rows || c < 0 || c >= cols) return;
@@ -74,6 +74,11 @@ void domainExpansion(Game *g, int r, int c) {
   if (cell == 'x') return;
   if (g->visible[r][c] != '#' && g->visible[r][c] != 'f') return;
   g->visible[r][c] = cell;
+  /* Update Visible board
+   * So technically this function is both logic and UI
+   */
+  printCell(g, visibleBoard, r, c);
+  
   g->freeCellsLeft--;
   
   /* Expand recursively if the cell have no bomb near it */
@@ -81,7 +86,7 @@ void domainExpansion(Game *g, int r, int c) {
     for (int i = -1; i <= 1; i++) {
       for (int j = -1; j <= 1; j++) {
         if (i == 0 && j == 0) continue;
-        domainExpansion(g, r+i, c+j);
+        domainExpansion(g, visibleBoard, r+i, c+j);
       }
     }
   }
