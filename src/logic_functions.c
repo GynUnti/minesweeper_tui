@@ -70,6 +70,7 @@ void domainExpansion(Game *g, WINDOW* visibleBoard, int r, int c) {
   int rows = g->rows;
   int cols = g->cols;
   if (r < 0 || r >= rows || c < 0 || c >= cols) return;
+  if (g->visible[r][c] == 'f') return;
   char cell = g->board[r][c];
   if (cell == 'x') return;
   if (g->visible[r][c] != '#' && g->visible[r][c] != 'f') return;
@@ -109,7 +110,14 @@ void flagToggle(Game *g, int r, int c) {
 }
 
 void winCheck(Game* g, int r, int c) {
-  if (g->freeCellsLeft == 0) g->state = STATE_WON;
-  else if (g->board[r][c] == 'x') g->state = STATE_LOST;
+  if (g->freeCellsLeft == 0) {
+    g->state = STATE_WON;
+    return;
+  }
+  if (g->visible[r][c] == 'f') return;
+  if (g->board[r][c] == 'x') {
+    g->state = STATE_LOST;
+    return;
+  }
 }
 

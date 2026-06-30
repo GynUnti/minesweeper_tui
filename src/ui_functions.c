@@ -192,14 +192,14 @@ int navigation(Game* g, WINDOW* visibleBoard) {
       default: 
         break;
     }
-    if (move == 10) {
+    if (move == ' ' || move == '\n') {
       if (g->firstMove) {
         placeBomb(g, r, c);
         numGen(g);
         g->firstMove = false;
       }
       updateBoard(g, visibleBoard, r, c);
-      break; // 10 is the wgetch() value for the Enter key. Some reason KEY_ENTER didn't work
+      break; 
     }
   }
   winCheck(g, r, c);
