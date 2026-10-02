@@ -27,3 +27,8 @@ make
 # Demo
 
 [![Minesweeper TUI demo]()](assets/minesweeper_tui_demo.mkv)
+
+https://github.com/user-attachments/assets/847444e4-92d3-47e3-8a40-2805e6cb7a77
+
+
+
