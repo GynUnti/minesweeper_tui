@@ -26,5 +26,4 @@ make
 ```
 # Demo
 
-[![Minesweeper TUI demo]()](assets/minesweeper_tui_demo.mp4)
-
+[![Minesweeper TUI demo]()](assets/minesweeper_tui_demo.mkv)
