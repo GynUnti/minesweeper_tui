@@ -24,3 +24,7 @@ make
 ```bash
 ./run
 ```
+# Demo
+
+[![Minesweeper TUI demo]()](assets/minesweeper_tui_demo.mp4)
+
